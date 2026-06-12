@@ -9,6 +9,7 @@
       rel="stylesheet"
     />
     <link href="./css/style.css" rel="stylesheet" />
+    <script src="https://forminit.com/sdk/v1/forminit.js"></script>
   </head>
   <body>
     <!-- HERO -->
@@ -47,14 +48,16 @@
       </div>
     </section>
     <nav>
-        <div class="nav-logo">MIRANDA<span>.</span></div>
-        <ul class="nav-links">
-          <li><a href="#features">Processo</a></li>
-          <li><a href="#objectives">Objetivos</a></li>
-          <li><a href="#differentials">Diferenciais</a></li>
-          <li><a href="#contact" class="nav-cta">Fale Conosco</a></li>
-        </ul>
-      </nav>
+      <div class="nav-logo">
+        <img src="./assets/logo-t2.png" alt="Miranda Logo" width="200px" />
+      </div>
+      <ul class="nav-links">
+        <li><a href="#features">Processo</a></li>
+        <li><a href="#objectives">Objetivos</a></li>
+        <li><a href="#differentials">Diferenciais</a></li>
+        <li><a href="#contact" class="nav-cta">Fale Conosco</a></li>
+      </ul>
+    </nav>
     <div class="container">
       <!-- PHOTO STRIP -->
       <!-- <div class="photo-strip">
@@ -385,7 +388,10 @@
                 <div>
                   <span class="c-lbl">WhatsApp</span
                   ><span class="c-val">
-                    <a href="https://wa.me/+5511991336384" target="_blank">+55 11 99133-6384</a></span>
+                    <a href="https://wa.me/+5511991336384" target="_blank"
+                      >+55 11 99133-6384</a
+                    ></span
+                  >
                 </div>
               </div>
               <div class="contact-row">
@@ -409,6 +415,33 @@
         </div>
       </section>
     </div>
+    <section class="lead-form-section">
+      <div class="lead-form-wrap reveal">
+        <div class="lead-form-head">
+          <p class="section-label">Receba o material</p>
+          <h3>Baixe seu e-book</h3>
+        </div>
+
+        <form id="contact-form" class="lead-form" novalidate>
+          <input
+            type="email"
+            name="fi-sender-email"
+            required
+            placeholder="Seu e-mail"
+            autocomplete="email"
+          />
+          <input
+            type="text"
+            name="sender-phone"
+            required
+            placeholder="Seu WhatsApp com DDI"
+            autocomplete="tel"
+          />
+
+          <button type="submit" class="btn-gold">Quero receber o e-book</button>
+        </form>
+      </div>
+    </section>
     <footer>
       <div class="footer-logo">MIRANDA<span>.</span></div>
       <span class="footer-copy"
@@ -428,6 +461,33 @@
         { threshold: 0.1 },
       );
       document.querySelectorAll(".reveal").forEach((r) => io.observe(r));
+
+      const forminit = new Forminit();
+      const form = document.getElementById("contact-form");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const phone = formData.get("sender-phone");
+
+        // validar o campo de telefone
+        if (!phone || phone.trim() === "") {
+          alert("Por favor, preencha o campo de WhatsApp");
+          return;
+        }
+
+        const phoneRegex =
+          /^\+[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,9}$/;
+        if (!phoneRegex.test(phone.replace(/\s/g, ""))) {
+          alert("Por favor, insira um número de telefone válido");
+          return;
+        }
+
+        const { error } = await forminit.submit("4e9pdmfjdf9", formData);
+        if (!error) {
+          window.open("thanks.html", "_blank");
+        }
+      });
     </script>
   </body>
 </html>
